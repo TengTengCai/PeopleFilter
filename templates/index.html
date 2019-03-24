@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "dataTables/jquery.dataTables.min.css" %}"/>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static "dataTables/jquery.dataTables.min.js" %}"></script>
+</head>
+<body>
+<div>
+    <h3>上传历史</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>时间</th>
+                <th>状态</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recode in up_recode %}
+            <tr>
+                <td>{{ recode.upload_time }} </td>
+                <td>{{ recode.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>上传文件</h3>
+     <form action="/people/index/" method="post" enctype="multipart/form-data">
+        <input type="file" name="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />
+        {% csrf_token %}
+         <input type="submit">
+     </form>
+</div>
+
+<div>
+    <h3>搜索结果</h3>
+    <form id="age_from">
+        <div>
+            <label>
+                上传时间
+                <select id="select_uploda_time" name="upload_time">
+                    {% for recode in up_recode %}
+                    <option value="{{ recode.upload_time | date:'Y-m-d H:i:s:u' }}">{{ recode.upload_time }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>
+                年龄计算日期
+                <input type="date" name="current_time" id="input_current_time">
+                <input id="query_current" type="button" value="查询">
+            </label>
+        </div>
+        <div>
+            <label>
+                年龄区间计算
+                <input id="input_min_age" name="min_age" type="number">-
+                <input id="input_max_age" name="max_age" type="number">岁
+                <input id="query_age" type="button" value="查询">
+            </label>
+        </div>
+
+
+    </form>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>身份证号</th>
+                <th>性别</th>
+                <th>生日</th>
+                <th>年龄</th>
+            </tr>
+        </thead>
+    </table>
+    <p id="total_p"></p>
+</div>
+
+</body>
+<script src="{% static "js/index.js" %}"></script>
+</html>
