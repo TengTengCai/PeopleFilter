@@ -99,7 +99,7 @@ def get_person_by_time(request):
             current_date = datetime.strptime(current_time, '%Y-%m-%d')
         else:
             current_date = datetime.now()
-        persons = Person.objects.filter(create_time__gte=upload_time).all()
+        persons = Person.objects.filter(create_time__gte=upload_time).order_by('id').all()
         data_array = []
         for person in persons:
             born = person.birthday
@@ -152,7 +152,7 @@ def get_person_by_age(request):
         persons = Person.objects.filter(
             create_time=upload_time,
             birthday__gte=min_datetime,
-            birthday__lte=max_datetime).all()
+            birthday__lte=max_datetime).order_by('id').all()
         in_count = float(len(persons))
         count_persons = Person.objects.filter(create_time=upload_time).count()
         data_array = []
