@@ -106,6 +106,7 @@ def get_person_by_time(request):
             current = current_date
             current_age = current.year - born.year - ((current.month, current.day) < (born.month, born.day))
             people = {
+                'id': person.id,
                 'name': person.name,
                 'id_num': person.id_num,
                 'sex': '男' if person.sex else '女',
@@ -161,6 +162,7 @@ def get_person_by_age(request):
             current = datetime.now()
             current_age = current.year - born.year - ((current.month, current.day) < (born.month, born.day))
             people = {
+                'id': person.id,
                 'name': person.name,
                 'id_num': person.id_num,
                 'sex': '男' if person.sex else '女',
