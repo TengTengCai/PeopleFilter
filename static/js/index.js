@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var table = $('#example').DataTable( {
-        "ajax": "/eopleerson_time",
+        "ajax": "/people/person_time/",
         "columns": [
             { "data": "id" },
             { "data": "name" },
