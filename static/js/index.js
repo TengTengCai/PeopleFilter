@@ -2,6 +2,7 @@ $(document).ready(function() {
     var table = $('#example').DataTable( {
         "ajax": "/people/person_time/",
         "columns": [
+            { "data": "id"}
             { "data": "name" },
             { "data": "id_num" },
             { "data": "sex" },
