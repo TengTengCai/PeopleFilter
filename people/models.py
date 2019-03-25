@@ -18,10 +18,10 @@ class Person(models.Model):
         (True, '男'),
         (False, '女')
     )
-    name = models.CharField(max_length=30)
-    id_num = models.CharField(max_length=18)
-    sex = models.BooleanField(choices=SEX_CHOICES)
-    birthday = models.DateField()
+    name = models.CharField(max_length=30, unique=False)
+    id_num = models.CharField(max_length=18, unique=False)
+    sex = models.BooleanField(choices=SEX_CHOICES, unique=False)
+    birthday = models.DateField(unique=False)
     create_time = models.DateTimeField(auto_created=True)
 
 

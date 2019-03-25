@@ -38,7 +38,6 @@ class MyThread(Thread):
         self.timestamp = timestamp
 
     def deal_excel(self):
-        print 'hello'
         upload_file = UploadRecord.objects.filter(upload_time=self.timestamp).first()
         file_path = upload_file.excel_file.path
         book = xlrd.open_workbook(file_path)
@@ -95,7 +94,7 @@ def get_person_by_time(request):
             ur = UploadRecord.objects.order_by('-id').first()
             upload_time = ur.upload_time
         current_time = get_obj.get('current_time')
-        if current_time is not None or current_time != '':
+        if current_time is not None and current_time != '':
             current_date = datetime.strptime(current_time, '%Y-%m-%d')
         else:
             current_date = datetime.now()
