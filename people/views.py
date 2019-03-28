@@ -148,7 +148,7 @@ def get_person_by_age(request):
 
         now_datetime = datetime.now()
         max_datetime = now_datetime.replace(now_datetime.year-int(min_age))
-        min_datetime = now_datetime.replace(now_datetime.year-int(max_age))
+        min_datetime = now_datetime.replace(now_datetime.year-int(max_age)-1)
         persons = Person.objects.filter(
             create_time=upload_time,
             birthday__gte=min_datetime,
