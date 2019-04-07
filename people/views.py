@@ -167,6 +167,11 @@ def get_person_by_age(request):
         now_datetime = datetime.now()
         max_datetime = now_datetime.replace(now_datetime.year-int(min_age))
         min_datetime = now_datetime.replace(now_datetime.year-int(max_age)-1)
+        current_time = get_obj.get('current_time')
+        if current_time is not None and current_time != '':
+            current_date = datetime.strptime(current_time, '%Y-%m-%d')
+        else:
+            current_date = datetime.now()
         if sex is not None and sex != '-1':
             sex = int(sex)
             persons = Person.objects.filter(
@@ -184,7 +189,7 @@ def get_person_by_age(request):
         data_array = []
         for person in persons:
             born = person.birthday
-            current = datetime.now()
+            current = current_date
             current_age = current.year - born.year - ((current.month, current.day) < (born.month, born.day))
             people = {
                 'id': person.id,
