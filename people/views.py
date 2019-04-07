@@ -5,13 +5,16 @@ import logging
 from datetime import datetime
 from threading import Thread
 
+import xlwt
+from django.core.cache import cache
 from django.db import transaction, DatabaseError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.shortcuts import render, redirect
 
 import xlrd
 
 # Create your views here.
+from PeopleFilter import settings
 from people.models import UploadRecord, Person
 
 logger = logging.getLogger(__name__)
@@ -23,7 +26,10 @@ def index(request):
         up_record = UploadRecord.objects.all().order_by('-id')[:5]
         return render(request, 'index.html', {'up_recode': up_record})
     elif request.method == 'POST':
-        excel_file = request.FILES['excel']
+        file_obj = request.FILES
+        excel_file = file_obj.get('excel')
+        if excel_file is None:
+            raise Http404
         now_time = datetime.now()
         UploadRecord(upload_time=now_time, excel_file=excel_file, status='上传成功').save()
         t = MyThread(now_time)
@@ -98,7 +104,16 @@ def get_person_by_time(request):
             current_date = datetime.strptime(current_time, '%Y-%m-%d')
         else:
             current_date = datetime.now()
-        persons = Person.objects.filter(create_time__gte=upload_time).order_by('id').all()
+        sex = get_obj.get('sex')
+        if sex is not None and sex != '-1':
+            sex = int(sex)
+            persons = Person.objects\
+                .filter(create_time__gte=upload_time, sex=sex)\
+                .order_by('id').all()
+        else:
+            persons = Person.objects\
+                .filter(create_time__gte=upload_time)\
+                .order_by('id').all()
         data_array = []
         for person in persons:
             born = person.birthday
@@ -113,6 +128,7 @@ def get_person_by_time(request):
                 'age': current_age
             }
             data_array.append(people)
+        cache.set('list_temp', data_array, timeout=60*60*24)
         data_dict = {
             'code': 0,
             'data': data_array
@@ -146,13 +162,23 @@ def get_person_by_age(request):
             data_dict['msg'] = 'max_age is small min_age args error'
             return JsonResponse(data_dict)
 
+        sex = get_obj.get('sex')
+
         now_datetime = datetime.now()
         max_datetime = now_datetime.replace(now_datetime.year-int(min_age))
         min_datetime = now_datetime.replace(now_datetime.year-int(max_age)-1)
-        persons = Person.objects.filter(
-            create_time=upload_time,
-            birthday__gte=min_datetime,
-            birthday__lte=max_datetime).order_by('id').all()
+        if sex is not None and sex != '-1':
+            sex = int(sex)
+            persons = Person.objects.filter(
+                create_time=upload_time,
+                birthday__gte=min_datetime,
+                birthday__lte=max_datetime,
+                sex=sex).order_by('id').all()
+        else:
+            persons = Person.objects.filter(
+                create_time=upload_time,
+                birthday__gte=min_datetime,
+                birthday__lte=max_datetime).order_by('id').all()
         in_count = float(len(persons))
         count_persons = Person.objects.filter(create_time=upload_time).count()
         data_array = []
@@ -169,9 +195,36 @@ def get_person_by_age(request):
                 'age': current_age
             }
             data_array.append(people)
+        cache.set('list_temp', data_array, timeout=60*60*24)
         data_dict = {
             'code': 0,
             'data': data_array,
             'in_total': in_count/count_persons
         }
         return JsonResponse(data_dict)
+
+
+def out_put_excel(request):
+    # content-type of response
+    response = HttpResponse(content_type='application/ms-excel')
+
+    # decide file name
+    response['Content-Disposition'] = 'attachment; filename="output.xlsx"'
+
+    data_array = cache.get('list_temp')
+    style1 = xlwt.easyxf(num_format_str='YYYY-MM-DD')
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('sheet1', cell_overwrite_ok=True)
+    i = 0
+    for p in data_array:
+        print p
+        ws.write(i, 0, i)
+        ws.write(i, 1, p['name'])
+        ws.write(i, 2, p['id_num'])
+        ws.write(i, 3, p['sex'])
+        ws.write(i, 4, p['birthday'], style1)
+        ws.write(i, 5, p['age'])
+        i += 1
+    wb.save(response)
+    return response
