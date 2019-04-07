@@ -43,6 +43,16 @@
     <form id="age_from">
         <div>
             <label>
+                性别
+                <select id="select_sex" name="sex">
+                    <option value="-1">无</option>
+                    <option value="1">男</option>
+                    <option value="0">女</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>
                 上传时间
                 <select id="select_uploda_time" name="upload_time">
                     {% for recode in up_recode %}
