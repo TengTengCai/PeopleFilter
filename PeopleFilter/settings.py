@@ -25,7 +25,7 @@ SECRET_KEY = 'sc!8ge743+a)y--c#(i2#jg0)#1an0bxj^v#-ow&g6lw%ub4zh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['120.79.52.3','127.0.0.1']
+ALLOWED_HOSTS = ['120.79.52.3', '127.0.0.1']
 
 
 # Application definition
@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'filtering',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
+        'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
