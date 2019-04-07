@@ -29,10 +29,12 @@ $(document).ready(function() {
         e.preventDefault();
         var upload_time = $('#select_uploda_time').val();
         var current_time = $('#input_current_time').val();
-        var sex = $('#select_sex').val()
+        var sex = $('#select_sex').val();
         console.log(current_time);
-        table.ajax.url('/people/person_time/?upload_time='+upload_time+
-            '&current_time='+current_time+'&sex='+sex).load();
+        table.ajax.url('/people/person_time/' +
+            '?upload_time='+upload_time+
+            '&current_time='+current_time+
+            '&sex='+sex).load();
     });
 
     $('#query_age').on('click', function (e) {
@@ -40,11 +42,16 @@ $(document).ready(function() {
         var upload_time = $('#select_uploda_time').val();
         var min_age = $('#input_min_age').val();
         var max_age = $('#input_max_age').val();
+        var current_time = $('#input_current_time').val();
         var sex = $('#select_sex').val();
         console.log(min_age,max_age);
         if (parseInt(min_age) < parseInt(max_age)){
-            table.ajax.url('/people/person_age/?upload_time='+upload_time+
-            '&min_age='+min_age+'&max_age='+max_age+'&sex='+sex).load();
+            table.ajax.url('/people/person_age/' +
+                '?upload_time='+upload_time+
+                '&min_age='+min_age+
+                '&max_age='+max_age+
+                '&sex='+sex+
+                '&current_time='+current_time).load();
         } else {
             alert('输入有误，最小年龄不得大于最大年龄')
         }
