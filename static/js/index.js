@@ -55,5 +55,10 @@ $(document).ready(function() {
         } else {
             alert('输入有误，最小年龄不得大于最大年龄')
         }
+    });
+    $('#button_output').on('click', function (e) {
+        e.preventDefault();
+        window.open('/people/download/');
     })
+
 } );
