@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import logging
+import time
 from datetime import datetime
 from threading import Thread
 
@@ -215,7 +216,8 @@ def out_put_excel(request):
     response = HttpResponse(content_type='application/ms-excel')
 
     # decide file name
-    response['Content-Disposition'] = 'attachment; filename="output.xlsx"'
+    timestamp = time.time()
+    response['Content-Disposition'] = 'attachment; filename="output{}.xls"'.format(int(timestamp))
 
     data_array = cache.get('list_temp')
     style1 = xlwt.easyxf(num_format_str='YYYY-MM-DD')
