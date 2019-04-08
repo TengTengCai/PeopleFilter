@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import logging
+import time
 from datetime import datetime
 from threading import Thread
 
@@ -162,16 +163,17 @@ def get_person_by_age(request):
             data_dict['msg'] = 'max_age is small min_age args error'
             return JsonResponse(data_dict)
 
-        sex = get_obj.get('sex')
-
-        now_datetime = datetime.now()
-        max_datetime = now_datetime.replace(now_datetime.year-int(min_age))
-        min_datetime = now_datetime.replace(now_datetime.year-int(max_age)-1)
         current_time = get_obj.get('current_time')
         if current_time is not None and current_time != '':
             current_date = datetime.strptime(current_time, '%Y-%m-%d')
         else:
             current_date = datetime.now()
+
+        now_datetime = current_date
+        max_datetime = now_datetime.replace(now_datetime.year-int(min_age))
+        min_datetime = now_datetime.replace(now_datetime.year-int(max_age)-1)
+
+        sex = get_obj.get('sex')
         if sex is not None and sex != '-1':
             sex = int(sex)
             persons = Person.objects.filter(
@@ -214,7 +216,8 @@ def out_put_excel(request):
     response = HttpResponse(content_type='application/ms-excel')
 
     # decide file name
-    response['Content-Disposition'] = 'attachment; filename="output.xlsx"'
+    timestamp = time.time()
+    response['Content-Disposition'] = 'attachment; filename="output{}.xls"'.format(int(timestamp))
 
     data_array = cache.get('list_temp')
     style1 = xlwt.easyxf(num_format_str='YYYY-MM-DD')
