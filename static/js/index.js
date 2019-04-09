@@ -66,6 +66,9 @@ $(document).ready(function() {
             dialog: {
                 enable: true,
                 hitokoto: true
+            },
+            react: {
+                opacity: 0.7
             }
         });
 } );
