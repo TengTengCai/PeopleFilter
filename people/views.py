@@ -227,12 +227,12 @@ def out_put_excel(request):
     i = 0
     for p in data_array:
         print p
-        ws.write(i, 0, i)
-        ws.write(i, 1, p['name'])
-        ws.write(i, 2, p['id_num'])
-        ws.write(i, 3, p['sex'])
-        ws.write(i, 4, p['birthday'], style1)
-        ws.write(i, 5, p['age'])
+        # ws.write(i, 0, i)
+        ws.write(i, 0, p['name'])
+        ws.write(i, 1, p['id_num'])
+        ws.write(i, 2, p['sex'])
+        ws.write(i, 3, p['birthday'], style1)
+        ws.write(i, 4, p['age'])
         i += 1
     wb.save(response)
     return response
