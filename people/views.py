@@ -226,7 +226,6 @@ def out_put_excel(request):
     ws = wb.add_sheet('sheet1', cell_overwrite_ok=True)
     i = 0
     for p in data_array:
-        print p
         # ws.write(i, 0, i)
         ws.write(i, 0, p['name'])
         ws.write(i, 1, p['id_num'])
