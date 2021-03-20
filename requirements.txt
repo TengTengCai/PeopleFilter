@@ -6,7 +6,7 @@ Django==1.11.20
 django-redis==4.10.0
 idna==2.8
 itypes==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 people==0.1.9
 PyMySQL==0.9.3
